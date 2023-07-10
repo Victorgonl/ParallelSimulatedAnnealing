@@ -3,8 +3,8 @@ import pandas
 import numpy
 
 
-date = ""
-directory = f"./data/{date}/"
+data = input("data: ")
+directory = f"./data/{data}/"
 
 evaluation = {}
 
@@ -14,7 +14,7 @@ evaluation["ssa"] = {"run_times": [],
 f = open(f"{directory}exp_params.json")
 parâmetros_da_experimentação = json.load(f)
 
-for i in range(parâmetros_da_experimentação["número_de_execuções"]):
+""" for i in range(parâmetros_da_experimentação["número_de_execuções"]):
 
     f = open(f"{directory}run-SSA-{i}.json")
     j = json.load(f)
@@ -25,7 +25,7 @@ print("SSA")
 print(pandas.DataFrame(evaluation["ssa"]))
 print("mean_run_time:", numpy.mean(evaluation["ssa"]["run_times"]))
 print("mean_value:", numpy.mean(evaluation["ssa"]["final_value"]))
-print()
+print() """
 
 threads_number = parâmetros_da_experimentação["threads_number"]
 k = 0

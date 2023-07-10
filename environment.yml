@@ -13,4 +13,5 @@ dependencies:
   - matplotlib
   - numpy
   - pandas
+  - py-cpuinfo
   - yapf

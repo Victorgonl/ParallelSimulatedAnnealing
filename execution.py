@@ -8,11 +8,16 @@ from src.simulated_annealing.simulated_annealing import simulated_annealing
 import json
 import datetime
 import os
+import cpuinfo
 
 
 date = datetime.datetime.now().strftime("%Y%m%d-%H%M")
 directory = f"./data/{date}/"
 os.makedirs(directory, exist_ok=True)
+
+print()
+print("Experimentação:", date)
+print()
 
 
 # ============================== POPULAÇÃO ============================== #
@@ -62,6 +67,22 @@ with open(f"{directory}init_solution.json", "w") as outfile:
     json.dump(mochila_inicial_dict, outfile, indent=4)
 
 
+# ============================== MÁQUINA ============================== #
+
+# parâmetros da experimentação
+parâmetros_da_experimentação = {"número_de_execuções": 1,
+                                "threads_number": [1, 2, 4, 8, 16]}
+
+with open(f"{directory}exp_params.json", "w") as outfile:
+    json.dump(parâmetros_da_experimentação, outfile, indent=4)
+
+# parâmetros da(s) máquina(s)
+cpu_info = cpuinfo.get_cpu_info()
+
+with open(f"{directory}cpu_info.json", "w") as outfile:
+    json.dump(cpu_info, outfile, indent=4)
+
+
 # ============================== ALGORITMOS ============================== #
 
 # parâmetros do algoritmo
@@ -73,14 +94,7 @@ parâmetros_do_algoritmo = {"temperatura_inicial": 1000,
 with open(f"{directory}algoritm_params.json", "w") as outfile:
     json.dump(parâmetros_do_algoritmo, outfile, indent=4)
 
-# parâmetros da experimentação
-parâmetros_da_experimentação = {"número_de_execuções": 10,
-                                "threads_number": [1, 2, 4, 8, 16]}
-
-with open(f"{directory}exp_params.json", "w") as outfile:
-    json.dump(parâmetros_da_experimentação, outfile, indent=4)
-
-# execução do algoritmo sequencial
+""" # execução do algoritmo sequencial
 for i in range(parâmetros_da_experimentação["número_de_execuções"]):
 
     print(f"SSA-{i}")
@@ -115,7 +129,7 @@ for i in range(parâmetros_da_experimentação["número_de_execuções"]):
     with open(f"{directory}run-SSA-{i}.json", "w") as outfile:
         json.dump(registro_dict, outfile, indent=4)
 
-    print()
+    print() """
 
 
 # execução do algoritmo paralelo
