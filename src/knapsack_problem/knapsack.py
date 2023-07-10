@@ -34,7 +34,8 @@ def gerar_mochila_aleatória(capacidade, itens) -> Mochila:
     return mochila
 
 def gerar_mochila_vizinha(mochila, itens):
-    mochila_vizinha = copy.copy(mochila)
+    mochila_vizinha = Mochila(mochila.capacidade)
+    mochila_vizinha.itens = copy.copy(mochila.itens)
     escolhas = ["adicionar_um_item", "retirar_e_adicionar_um_item"]
     decisão = random.choice(escolhas)
     if decisão == "adicionar_um_item":
