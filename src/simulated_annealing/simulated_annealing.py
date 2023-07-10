@@ -12,9 +12,11 @@ def simulated_annealing(temperatura_inicial,
                         avaliar_solução,
                         função_de_resfriamento,
                         itens,
-                        gerar_solução_inicial=None,
                         solução_inicial=None,
                         número_de_vizinhos_a_explorar=1):
+
+    t = time.time()
+
     # registro
     registro = {"avaliação": [],
                 "temperatura": [],
@@ -22,8 +24,6 @@ def simulated_annealing(temperatura_inicial,
                 "número_vizinhos_explorados": 0}
 
     # inicialização
-    if solução_inicial is None and gerar_solução_inicial is not None:
-        solução_inicial = gerar_solução_inicial()
     temperatura_atual = temperatura_inicial
     solução_atual = solução_inicial
     iteração = 0
@@ -84,7 +84,9 @@ def simulated_annealing(temperatura_inicial,
 
     # encerra a barra de progresso
     barra_de_progresso.close()
-    time.sleep(1)
+
+    t = time.time() - t
+    registro["run_time"] = t
 
     # retorna a solução
     return solução_atual, registro

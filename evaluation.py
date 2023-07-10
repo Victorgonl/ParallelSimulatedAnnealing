@@ -3,7 +3,7 @@ import pandas
 import numpy
 
 
-date = "20230710-"
+date = "20230710"
 directory = f"./data/{date}/"
 
 evaluation = {}
@@ -11,12 +11,12 @@ evaluation = {}
 evaluation["ssa"] = {"run_times": [],
                       "final_value": []}
 
-f = open(f"{directory}/exp_params.json")
+f = open(f"{directory}exp_params.json")
 parâmetros_da_experimentação = json.load(f)
 
 for i in range(parâmetros_da_experimentação["número_de_execuções"]):
 
-    f = open(f"{directory}/run-SSA-{i}.json")
+    f = open(f"{directory}run-SSA-{i}.json")
     j = json.load(f)
     evaluation["ssa"]["run_times"].append(j["execution_time"])
     evaluation["ssa"]["final_value"].append(j["value"][-1])

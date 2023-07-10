@@ -5,7 +5,6 @@ from src.simulated_annealing.parallel_simulated_annealing import parallel_simula
 from src.simulated_annealing.reduction_functions import geometric_reduction
 from src.simulated_annealing.simulated_annealing import simulated_annealing
 
-import time
 import json
 import datetime
 import os
@@ -77,7 +76,7 @@ with open(f"{directory}algoritm_params.json", "w") as outfile:
 
 # parâmetros da experimentação
 parâmetros_da_experimentação = {"número_de_execuções": 100,
-                                "threads_number": [1, 2, 4, 6, 8, 16]}
+                                "threads_number": [1, 2, 4, 8, 16]}
 
 with open(f"{directory}exp_params.json", "w") as outfile:
     json.dump(parâmetros_da_experimentação, outfile, indent=4)
@@ -86,8 +85,6 @@ with open(f"{directory}exp_params.json", "w") as outfile:
 for i in range(parâmetros_da_experimentação["número_de_execuções"]):
 
     print(f"SSA-{i}")
-
-    t = time.time()
 
     solução, registro = simulated_annealing(
         temperatura_inicial=parâmetros_do_algoritmo["temperatura_inicial"],
@@ -102,16 +99,14 @@ for i in range(parâmetros_da_experimentação["número_de_execuções"]):
         itens=itens
     )
 
-    t = time.time() - t
-
-    print("Tempo de execução: %s seconds" % t)
+    print("Tempo de execução: %s seconds" % registro["run_time"])
     print("Total de itens na mochila:", len(solução.itens))
     print("Itens na mochila:", [item.id for item in solução.itens])
     print("Valor total na mochila:", avaliar_mochila(solução))
     print("Peso total na mochila:", solução.peso())
     print("Número de vizinhos explorados:", registro["número_vizinhos_explorados"])
 
-    registro_dict = {"execution_time": t,
+    registro_dict = {"execution_time": registro["run_time"],
                      "value": registro["avaliação"],
                      "temperature": registro["temperatura"],
                      "exploited_neighbors": registro["número_vizinhos_explorados"],
@@ -135,8 +130,6 @@ for k in range(len(parâmetros_da_experimentação["threads_number"])):
 
         print(f"PSA{número_de_threads}-{i}")
 
-        t = time.time()
-
         solução, registro = parallel_simulated_annealing(
             temperatura_inicial=parâmetros_do_algoritmo["temperatura_inicial"],
             temperatura_final=parâmetros_do_algoritmo["temperatura_final"],
@@ -151,16 +144,14 @@ for k in range(len(parâmetros_da_experimentação["threads_number"])):
             número_de_threads=número_de_threads
         )
 
-        t = time.time() - t
-
-        print("Tempo de execução: %s seconds" % t)
+        print("Tempo de execução: %s seconds" % registro["run_time"])
         print("Total de itens na mochila:", len(solução.itens))
         print("Itens na mochila:", [item.id for item in solução.itens])
         print("Valor total na mochila:", avaliar_mochila(solução))
         print("Peso total na mochila:", solução.peso())
         print("Número de vizinhos explorados:", registro["número_vizinhos_explorados"])
 
-        registro_dict = {"execution_time": t,
+        registro_dict = {"execution_time": registro["run_time"],
                         "threads_number": número_de_threads,
                         "value": registro["avaliação"],
                         "temperature": registro["temperatura"],

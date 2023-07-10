@@ -13,10 +13,12 @@ def parallel_simulated_annealing(temperatura_inicial,
                                  avaliar_solução,
                                  função_de_resfriamento,
                                  itens,
-                                 gerar_solução_inicial=None,
                                  solução_inicial=None,
                                  número_de_vizinhos_a_explorar=1,
                                  número_de_threads=1):
+
+    t = time.time()
+
     # registro
     registro = {"avaliação": [],
                 "temperatura": [],
@@ -24,8 +26,6 @@ def parallel_simulated_annealing(temperatura_inicial,
                 "número_vizinhos_explorados": 0}
 
     # inicialização
-    if solução_inicial is None and gerar_solução_inicial is not None:
-        solução_inicial = gerar_solução_inicial()
     temperatura_atual = temperatura_inicial
     solução_atual = solução_inicial
     iteração = 0
@@ -66,13 +66,13 @@ def parallel_simulated_annealing(temperatura_inicial,
         número_de_vizinhos_a_explorar_por_thread[-1] += número_de_vizinhos_a_explorar - sum(número_de_vizinhos_a_explorar_por_thread)
 
         for i in range(número_de_threads):
-            t = threading.Thread(target=explorar_vizinhos, args=(número_de_vizinhos_a_explorar_por_thread[i], vizinhos_escolhidos_por_thread, temperatura_atual, len(threads)))
-            threads.append(t)
-            t.start()
+            thread = threading.Thread(target=explorar_vizinhos, args=(número_de_vizinhos_a_explorar_por_thread[i], vizinhos_escolhidos_por_thread, temperatura_atual, len(threads)))
+            threads.append(thread)
+            thread.start()
 
         # Aguardar até que todas as threads terminem
-        for t in threads:
-            t.join()
+        for thread in threads:
+            thread.join()
 
         # Selecionar a solução atual como a solução vizinha com o menor erro
         solução_atual, erro = min(vizinhos_escolhidos_por_thread, key=lambda x: x[1])
@@ -97,7 +97,9 @@ def parallel_simulated_annealing(temperatura_inicial,
 
     # Encerrar a barra de progresso
     barra_de_progresso.close()
-    time.sleep(1)
+
+    t = time.time() - t
+    registro["run_time"] = t
 
     # Retorna a solução
     return solução_atual, registro
