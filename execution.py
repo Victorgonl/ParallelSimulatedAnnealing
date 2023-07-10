@@ -10,7 +10,7 @@ import datetime
 import os
 
 
-date = datetime.datetime.now().strftime("%Y%m%d")
+date = datetime.datetime.now().strftime("%Y%m%d-%H%M")
 directory = f"./data/{date}/"
 os.makedirs(directory, exist_ok=True)
 
@@ -19,7 +19,6 @@ os.makedirs(directory, exist_ok=True)
 
 # parâmetros da população
 parâmetros_da_população = {"número_de_itens": 1000000,
-                            "número_de_itens": 1000000,
                             "valor_mínimo" :0.0,
                             "valor_máximo": 1.0,
                             "peso_mínimo": 0.0,
@@ -66,16 +65,16 @@ with open(f"{directory}init_solution.json", "w") as outfile:
 # ============================== ALGORITMOS ============================== #
 
 # parâmetros do algoritmo
-parâmetros_do_algoritmo = {"temperatura_inicial": 1,
+parâmetros_do_algoritmo = {"temperatura_inicial": 1000,
                            "temperatura_final": 0.1,
                            "taxa_de_resfriamento": 0.01,
-                           "número_de_vizinhos_a_explorar": 100}
+                           "número_de_vizinhos_a_explorar": 1000}
 
 with open(f"{directory}algoritm_params.json", "w") as outfile:
     json.dump(parâmetros_do_algoritmo, outfile, indent=4)
 
 # parâmetros da experimentação
-parâmetros_da_experimentação = {"número_de_execuções": 100,
+parâmetros_da_experimentação = {"número_de_execuções": 10,
                                 "threads_number": [1, 2, 4, 8, 16]}
 
 with open(f"{directory}exp_params.json", "w") as outfile:

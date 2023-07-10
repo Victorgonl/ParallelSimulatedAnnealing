@@ -3,7 +3,7 @@ import pandas
 import numpy
 
 
-date = "20230710"
+date = ""
 directory = f"./data/{date}/"
 
 evaluation = {}
