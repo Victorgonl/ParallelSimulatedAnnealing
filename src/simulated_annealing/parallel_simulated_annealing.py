@@ -26,9 +26,13 @@ def parallel_simulated_annealing(temperatura_inicial,
                 "número_vizinhos_explorados": 0}
 
     # inicialização
+    global temperatura_atual
     temperatura_atual = temperatura_inicial
+    global solução_atual
     solução_atual = solução_inicial
     iteração = 0
+    número_de_vizinhos_a_explorar_por_thread = [número_de_vizinhos_a_explorar // número_de_threads for _ in range(número_de_threads)]
+    número_de_vizinhos_a_explorar_por_thread[-1] += número_de_vizinhos_a_explorar - sum(número_de_vizinhos_a_explorar_por_thread)
 
     # registrar avaliação e temperatura
     registro["avaliação"].append(avaliar_solução(solução_atual))
@@ -41,32 +45,25 @@ def parallel_simulated_annealing(temperatura_inicial,
                                    bar_format="{l_bar}{bar}| {postfix}")
 
     # função para explorar vizinhos
-    def explorar_vizinhos(número_de_vizinhos_a_explorar,
-                          vizinhos_escolhidos,
-                          temperatura,
-                          thread_id):
+    def explorar_vizinhos(soluções_vizinhas,
+                          número_de_vizinhos_a_explorar):
         for _ in range(número_de_vizinhos_a_explorar):
-            solução_vizinha = gerar_solução_vizinha(vizinhos_escolhidos_por_thread[thread_id][0], itens)
-            erro = comparar_soluções(vizinhos_escolhidos_por_thread[thread_id][0], solução_vizinha)
-            probabilidade = math.exp(-erro / temperatura)
-            if erro < 0:
-                vizinhos_escolhidos_por_thread[thread_id] = (solução_vizinha, erro)
-            else:
-                x = random.random()
-                if probabilidade > x:
-                    vizinhos_escolhidos[thread_id] = (solução_vizinha, erro)
+            global solução_atual
+            global temperatura_atual
+            solução_vizinha = gerar_solução_vizinha(solução_atual, itens)
+            erro = comparar_soluções(solução_atual, solução_vizinha)
+            probabilidade = math.exp(-erro / temperatura_atual)
+            soluções_vizinhas.append((solução_vizinha, erro, probabilidade))
             registro["número_vizinhos_explorados"] += 1
 
     # laço de temperatura
     while temperatura_atual > temperatura_final:
         # explorar vizinhos
         threads = []
-        vizinhos_escolhidos_por_thread = [(solução_atual, 0) for _ in range(número_de_threads)]
-        número_de_vizinhos_a_explorar_por_thread = [número_de_vizinhos_a_explorar // número_de_threads for _ in range(número_de_threads)]
-        número_de_vizinhos_a_explorar_por_thread[-1] += número_de_vizinhos_a_explorar - sum(número_de_vizinhos_a_explorar_por_thread)
+        soluções_vizinhas = []
 
         for i in range(número_de_threads):
-            thread = threading.Thread(target=explorar_vizinhos, args=(número_de_vizinhos_a_explorar_por_thread[i], vizinhos_escolhidos_por_thread, temperatura_atual, len(threads)))
+            thread = threading.Thread(target=explorar_vizinhos, args=(soluções_vizinhas, número_de_vizinhos_a_explorar_por_thread[i]))
             threads.append(thread)
             thread.start()
 
@@ -75,7 +72,9 @@ def parallel_simulated_annealing(temperatura_inicial,
             thread.join()
 
         # Selecionar a solução atual como a solução vizinha com o menor erro
-        solução_atual, erro = min(vizinhos_escolhidos_por_thread, key=lambda x: x[1])
+        for (solução_vizinha, erro, probabilidade) in soluções_vizinhas:
+            if erro < 0 or probabilidade > random.random():
+                solução_atual = solução_vizinha
 
         # Chamar a função de resfriamento
         nova_temperatura = função_de_resfriamento(temperatura_atual, taxa_de_resfriamento)
