@@ -1,6 +1,5 @@
 .ignore
 
-data/*
 !data/README.md
 
 *__pycache__*

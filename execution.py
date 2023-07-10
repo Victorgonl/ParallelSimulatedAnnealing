@@ -131,9 +131,9 @@ for k in range(len(parâmetros_da_experimentação["threads_number"])):
 
     for i in range(parâmetros_da_experimentação["número_de_execuções"]):
 
-        print(f"PSA{número_de_threads}-{i}")
-
         número_de_threads = parâmetros_da_experimentação["threads_number"][k]
+
+        print(f"PSA{número_de_threads}-{i}")
 
         t = time.time()
 
