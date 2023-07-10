@@ -1,0 +1,5 @@
+{
+    "python.defaultInterpreterPath": ".micromamba/envs/algorithm/bin/python",
+    "python.formatting.provider": "yapf",
+    "jupyter.notebookFileRoot": "${fileDirname}",
+}
