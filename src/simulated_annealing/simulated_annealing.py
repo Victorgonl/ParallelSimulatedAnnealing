@@ -1,9 +1,7 @@
-import copy
 import math
 import random
 import time
 import tqdm
-import numpy
 
 
 def simulated_annealing(temperatura_inicial,
@@ -11,33 +9,36 @@ def simulated_annealing(temperatura_inicial,
                         taxa_de_resfriamento,
                         gerar_solução_vizinha,
                         comparar_soluções,
-                        avaliar_solução,função_de_resfriamento,
+                        avaliar_solução,
+                        função_de_resfriamento,
                         itens,
                         gerar_solução_inicial=None,
                         solução_inicial=None,
                         número_de_vizinhos_a_explorar=1):
     # registro
     registro = {"avaliação": [],
-                "temperaturas": [],
+                "temperatura": [],
+                "solução": [],
                 "número_vizinhos_explorados": 0}
 
     # inicialização
     if solução_inicial is None and gerar_solução_inicial is not None:
         solução_inicial = gerar_solução_inicial()
     temperatura_atual = temperatura_inicial
-    solução_atual = copy.deepcopy(solução_inicial)
+    solução_atual = solução_inicial
     iteração = 0
 
     # registrar avaliação e temperatura
     registro["avaliação"].append(avaliar_solução(solução_atual))
-    registro["temperaturas"].append(temperatura_atual)
+    registro["temperatura"].append(temperatura_atual)
+    registro["solução"].append(solução_atual)
 
     # barra de progresso
-    total=math.ceil(math.log(temperatura_final / temperatura_inicial, função_de_resfriamento(1, taxa_de_resfriamento)))
+    total = math.ceil(math.log(temperatura_final / temperatura_inicial, função_de_resfriamento(1, taxa_de_resfriamento)))
     barra_de_progresso = tqdm.tqdm(total=total, desc="Simulated Annealing",
                                    bar_format="{l_bar}{bar}| {postfix}")
 
-    # Função para explorar vizinhos
+    # função para explorar vizinhos
     def explorar_vizinhos(número_de_vizinhos_a_explorar,
                           vizinho_escolhido,
                           temperatura):
@@ -69,7 +70,7 @@ def simulated_annealing(temperatura_inicial,
 
         # registrar avaliação e temperatura
         registro["avaliação"].append(avaliar_solução(solução_atual))
-        registro["temperaturas"].append(temperatura_atual)
+        registro["temperatura"].append(temperatura_atual)
 
         # atualiza a barra de progresso
         barra_de_progresso.set_postfix({"Temperatura": "{:.5f}".format(temperatura_atual),

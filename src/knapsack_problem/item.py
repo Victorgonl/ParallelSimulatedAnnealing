@@ -13,10 +13,10 @@ def gerar_itens_aleatórios(número_de_itens,
                            tipo=int):
     itens = []
     for i in range(número_de_itens):
-        if tipo is int:
+        if tipo == "int":
             valor = random.randint(valor_mínimo, valor_máximo)
             peso = random.randint(peso_mínimo, peso_máximo)
-        elif tipo is float:
+        elif tipo == "float":
             valor = random.uniform(valor_mínimo, valor_máximo)
             peso = random.uniform(peso_mínimo, peso_máximo)
         item = Item(i, valor, peso)

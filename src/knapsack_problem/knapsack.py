@@ -1,5 +1,5 @@
-import copy
 import random
+import copy
 
 
 class Mochila:
@@ -12,7 +12,7 @@ class Mochila:
             if item_na_mochila.id == item.id:
                 return False
         if item.peso + self.peso() <= self.capacidade:
-            self.itens.append(copy.deepcopy(item))
+            self.itens.append(item)
             return True
         return False
 
@@ -34,7 +34,7 @@ def gerar_mochila_aleatória(capacidade, itens) -> Mochila:
     return mochila
 
 def gerar_mochila_vizinha(mochila, itens):
-    mochila_vizinha = copy.deepcopy(mochila)
+    mochila_vizinha = copy.copy(mochila)
     escolhas = ["adicionar_um_item", "retirar_e_adicionar_um_item"]
     decisão = random.choice(escolhas)
     if decisão == "adicionar_um_item":
