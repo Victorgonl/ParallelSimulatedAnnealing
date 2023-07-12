@@ -1,0 +1,7 @@
+jupyterlab
+tqdm
+matplotlib
+numpy
+pandas
+py-cpuinfo
+yapf

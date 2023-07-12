@@ -7,11 +7,11 @@ channels:
   - conda-forge
 
 dependencies:
-  - python
-  - ipykernel
-  - tqdm
-  - matplotlib
-  - numpy
-  - pandas
-  - py-cpuinfo
-  - yapf
+  - python=3.11
+  - jupyterlab=4.0
+  - tqdm=4.65
+  - matplotlib=3.7
+  - numpy=1.25
+  - pandas=2.0
+  - py-cpuinfo=9.0
+  - yapf=0.33
