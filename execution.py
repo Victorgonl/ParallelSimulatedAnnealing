@@ -70,7 +70,7 @@ with open(f"{directory}init_solution.json", "w") as outfile:
 # ============================== MÁQUINA ============================== #
 
 # parâmetros da experimentação
-parâmetros_da_experimentação = {"número_de_execuções": 1,
+parâmetros_da_experimentação = {"número_de_execuções": 100,
                                 "processes_number": [1, 2, 4, 8, 16]}
 
 with open(f"{directory}exp_params.json", "w") as outfile:
