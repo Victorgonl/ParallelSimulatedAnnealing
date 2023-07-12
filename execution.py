@@ -71,7 +71,7 @@ with open(f"{directory}init_solution.json", "w") as outfile:
 
 # parâmetros da experimentação
 parâmetros_da_experimentação = {"número_de_execuções": 1,
-                                "threads_number": [1, 2, 4, 8, 16]}
+                                "processes_number": [1, 2, 4, 8, 16]}
 
 with open(f"{directory}exp_params.json", "w") as outfile:
     json.dump(parâmetros_da_experimentação, outfile, indent=4)
@@ -86,7 +86,7 @@ with open(f"{directory}cpu_info.json", "w") as outfile:
 # ============================== ALGORITMOS ============================== #
 
 # parâmetros do algoritmo
-parâmetros_do_algoritmo = {"temperatura_inicial": 1000,
+parâmetros_do_algoritmo = {"temperatura_inicial": 1,
                            "temperatura_final": 0.1,
                            "taxa_de_resfriamento": 0.01,
                            "número_de_vizinhos_a_explorar": 1000}
@@ -135,13 +135,13 @@ for i in range(parâmetros_da_experimentação["número_de_execuções"]):
 # execução do algoritmo paralelo
 k = 0
 
-for k in range(len(parâmetros_da_experimentação["threads_number"])):
+for k in range(len(parâmetros_da_experimentação["processes_number"])):
 
     for i in range(parâmetros_da_experimentação["número_de_execuções"]):
 
-        número_de_threads = parâmetros_da_experimentação["threads_number"][k]
+        número_de_processos = parâmetros_da_experimentação["processes_number"][k]
 
-        print(f"PSA{número_de_threads}-{i}")
+        print(f"PSA{número_de_processos}-{i}")
 
         solução, registro = parallel_simulated_annealing(
             temperatura_inicial=parâmetros_do_algoritmo["temperatura_inicial"],
@@ -154,7 +154,7 @@ for k in range(len(parâmetros_da_experimentação["threads_number"])):
             função_de_resfriamento=geometric_reduction,
             solução_inicial=mochila_inicial,
             itens=itens,
-            número_de_threads=número_de_threads
+            número_de_processos=número_de_processos
         )
 
         print("Tempo de execução: %s seconds" % registro["run_time"])
@@ -165,14 +165,14 @@ for k in range(len(parâmetros_da_experimentação["threads_number"])):
         print("Número de vizinhos explorados:", registro["número_vizinhos_explorados"])
 
         registro_dict = {"execution_time": registro["run_time"],
-                        "threads_number": número_de_threads,
+                        "processes_number": número_de_processos,
                         "value": registro["avaliação"],
                         "temperature": registro["temperatura"],
                         "exploited_neighbors": registro["número_vizinhos_explorados"],
                         "itens": [item.id for item in solução.itens],
                         "solution": [[item.id for item in solução.itens] for solução in registro["solução"]]}
 
-        with open(f"{directory}run-PSA{número_de_threads}-{i}.json", "w") as outfile:
+        with open(f"{directory}run-PSA{número_de_processos}-{i}.json", "w") as outfile:
             json.dump(registro_dict, outfile, indent=4)
 
         print()
