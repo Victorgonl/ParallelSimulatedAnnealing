@@ -1,9 +1,0 @@
-{
-    "python.defaultInterpreterPath": ".micromamba/envs/ParallelSimulatedAnnealing/bin/python",
-    "jupyter.notebookFileRoot": "${fileDirname}",
-    "python.formatting.provider": "yapf",
-    "python.linting.enabled": true,
-    "python.analysis.extraPaths": [
-        "./src/knapsack_problem"
-    ],
-}
