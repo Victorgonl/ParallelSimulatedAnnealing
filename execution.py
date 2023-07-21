@@ -1,13 +1,10 @@
-from src.knapsack_problem.item import gerar_itens_aleatórios
-from src.knapsack_problem.knapsack import avaliar_mochila, diferença_entre_mochilas, gerar_mochila_aleatória, gerar_mochila_vizinha
-from src.simulated_annealing.parallel_simulated_annealing import parallel_simulated_annealing
-from src.simulated_annealing.reduction_functions import geometric_reduction
-from src.simulated_annealing.simulated_annealing import simulated_annealing
-
 import json
 import datetime
 import os
 import cpuinfo
+
+from src.functions.helper_functions import avaliar_mochila, diferenca_mochilas, geometric_reduction, gerar_itens_aleatorios, gerar_mochila_aleatoria, gerar_mochila_vizinha
+from src.simulated_annealing.simulated_annealing import SimulatedAnnealing
 
 
 to_save = False
@@ -26,7 +23,7 @@ print()
 # ============================== POPULAÇÃO ============================== #
 
 # parâmetros da população
-parâmetros_da_população = {"número_de_itens": 100000,
+parametros_populacao = {"número_de_itens": 100000,
                             "valor_mínimo" :0.0,
                             "valor_máximo": 1.0,
                             "peso_mínimo": 0.0,
@@ -34,12 +31,12 @@ parâmetros_da_população = {"número_de_itens": 100000,
                             "tipo": "float"}
 
 # geração da população
-itens = gerar_itens_aleatórios(parâmetros_da_população["número_de_itens"],
-                               parâmetros_da_população["valor_mínimo"],
-                               parâmetros_da_população["valor_máximo"],
-                               parâmetros_da_população["peso_mínimo"],
-                               parâmetros_da_população["peso_máximo"],
-                               parâmetros_da_população["tipo"])
+itens = gerar_itens_aleatorios(parametros_populacao["número_de_itens"],
+                               parametros_populacao["valor_mínimo"],
+                               parametros_populacao["valor_máximo"],
+                               parametros_populacao["peso_mínimo"],
+                               parametros_populacao["peso_máximo"],
+                               parametros_populacao["tipo"])
 
 itens_dict = {"id": [item.id for item in itens],
               "valor": [item.valor for item in itens],
@@ -47,7 +44,7 @@ itens_dict = {"id": [item.id for item in itens],
 
 if to_save:
     with open(f"{directory}pop_param.json", "w") as outfile:
-        json.dump(parâmetros_da_população, outfile, indent=4)
+        json.dump(parametros_populacao, outfile, indent=4)
 
 if to_save and to_save_population:
     with open(f"{directory}pop.json", "w") as outfile:
@@ -58,10 +55,10 @@ if to_save and to_save_population:
 
 
 # parâmetros da solução
-capacidade_das_mochilas = 1.0
+capacidade_mochilas = 1.0
 
 # geração da solução inicial
-mochila_inicial = gerar_mochila_aleatória(capacidade=capacidade_das_mochilas,
+mochila_inicial = gerar_mochila_aleatoria(capacidade=capacidade_mochilas,
                                           itens=itens)
 
 mochila_inicial_dict = {"capacidade": mochila_inicial.capacidade,
@@ -75,7 +72,7 @@ if to_save:
 # ============================== MÁQUINA ============================== #
 
 # parâmetros da experimentação
-parâmetros_da_experimentação = {"número_de_execuções": 1,
+parametros_experimentacao = {"número_de_execuções": 1,
                                 "processes_number": [1, 2, 4, 8, 16]}
 
 # parâmetros da(s) máquina(s)
@@ -83,7 +80,7 @@ cpu_info = cpuinfo.get_cpu_info()
 
 if to_save:
     with open(f"{directory}exp_params.json", "w") as outfile:
-        json.dump(parâmetros_da_experimentação, outfile, indent=4)
+        json.dump(parametros_experimentacao, outfile, indent=4)
 
     with open(f"{directory}cpu_info.json", "w") as outfile:
         json.dump(cpu_info, outfile, indent=4)
@@ -92,7 +89,7 @@ if to_save:
 # ============================== ALGORITMOS ============================== #
 
 # parâmetros do algoritmo
-parâmetros_do_algoritmo = {"temperatura_inicial": 1,
+parametros_algoritmos = {"temperatura_inicial": 1,
                            "temperatura_final": 0.1,
                            "taxa_de_resfriamento": 0.01,
                            "número_de_vizinhos_a_explorar": 1000,
@@ -100,18 +97,18 @@ parâmetros_do_algoritmo = {"temperatura_inicial": 1,
 
 if to_save:
     with open(f"{directory}algoritm_params.json", "w") as outfile:
-        json.dump(parâmetros_do_algoritmo, outfile, indent=4)
+        json.dump(parametros_algoritmos, outfile, indent=4)
 
 """ # execução do algoritmo sequencial
-for i in range(parâmetros_da_experimentação["número_de_execuções"]):
+for i in range(parametros_experimentacao["número_de_execuções"]):
 
     print(f"SSA-{i}")
 
     solução, registro = simulated_annealing(
-        temperatura_inicial=parâmetros_do_algoritmo["temperatura_inicial"],
-        temperatura_final=parâmetros_do_algoritmo["temperatura_final"],
-        taxa_de_resfriamento=parâmetros_do_algoritmo["taxa_de_resfriamento"],
-        número_de_vizinhos_a_explorar=parâmetros_do_algoritmo["número_de_vizinhos_a_explorar"],
+        temperatura_inicial=parametros_algoritmos["temperatura_inicial"],
+        temperatura_final=parametros_algoritmos["temperatura_final"],
+        taxa_de_resfriamento=parametros_algoritmos["taxa_de_resfriamento"],
+        número_de_vizinhos_a_explorar=parametros_algoritmos["número_de_vizinhos_a_explorar"],
         gerar_solução_vizinha=gerar_mochila_vizinha,
         comparar_soluções=diferença_entre_mochilas,
         avaliar_solução=avaliar_mochila,
@@ -142,28 +139,31 @@ for i in range(parâmetros_da_experimentação["número_de_execuções"]):
 # execução do algoritmo paralelo
 k = 0
 
-for k in range(len(parâmetros_da_experimentação["processes_number"])):
+for k in range(len(parametros_experimentacao["processes_number"])):
 
-    for i in range(parâmetros_da_experimentação["número_de_execuções"]):
+    for i in range(parametros_experimentacao["número_de_execuções"]):
 
-        número_de_processos = parâmetros_da_experimentação["processes_number"][k]
+        numero_processos = parametros_experimentacao["processes_number"][k]
 
-        print(f"PSA{número_de_processos}-{i}")
+        print(f"PSA{numero_processos}-{i}")
 
-        solução, registro = parallel_simulated_annealing(
-            temperatura_inicial=parâmetros_do_algoritmo["temperatura_inicial"],
-            temperatura_final=parâmetros_do_algoritmo["temperatura_final"],
-            taxa_de_resfriamento=parâmetros_do_algoritmo["taxa_de_resfriamento"],
-            número_de_vizinhos_a_explorar=parâmetros_do_algoritmo["número_de_vizinhos_a_explorar"],
-            forma_de_seleção=parâmetros_do_algoritmo["forma_de_seleção"],
-            gerar_solução_vizinha=gerar_mochila_vizinha,
-            comparar_soluções=diferença_entre_mochilas,
-            avaliar_solução=avaliar_mochila,
-            função_de_resfriamento=geometric_reduction,
-            solução_inicial=mochila_inicial,
+        simulated_annealing = SimulatedAnnealing(
+            temperatura_inicial=parametros_algoritmos["temperatura_inicial"],
+            temperatura_final=parametros_algoritmos["temperatura_final"],
+            taxa_resfriamento=parametros_algoritmos["taxa_de_resfriamento"],
+            numero_vizinhos_explorar=parametros_algoritmos["número_de_vizinhos_a_explorar"],
+            gerar_solucao_vizinha=gerar_mochila_vizinha,
+            comparar_solucoes=diferenca_mochilas,
+            avaliar_solucao=avaliar_mochila,
+            funcao_resfriamento=geometric_reduction,
+            solucao_inicial=mochila_inicial,
             itens=itens,
-            número_de_processos=número_de_processos,
-            mostrar_barra_de_progresso=show_progress_bar
+        )
+
+        solução, registro = simulated_annealing.executar_paralelo(
+            mostrar_barra_progresso=show_progress_bar,
+            forma_selecao=parametros_algoritmos["forma_de_seleção"],
+            numero_processos=numero_processos,
         )
 
         print("Tempo de execução: %s seconds" % registro["run_time"])
@@ -174,7 +174,7 @@ for k in range(len(parâmetros_da_experimentação["processes_number"])):
         print("Número de vizinhos explorados:", registro["número_vizinhos_explorados"])
 
         registro_dict = {"execution_time": registro["run_time"],
-                        "processes_number": número_de_processos,
+                        "processes_number": numero_processos,
                         "value": registro["avaliação"],
                         "temperature": registro["temperatura"],
                         "exploited_neighbors": registro["número_vizinhos_explorados"],
@@ -182,7 +182,7 @@ for k in range(len(parâmetros_da_experimentação["processes_number"])):
                         "solution": [[item.id for item in solução.itens] for solução in registro["solução"]]}
 
         if to_save:
-            with open(f"{directory}run-PSA{número_de_processos}-{i}.json", "w") as outfile :
+            with open(f"{directory}run-PSA{numero_processos}-{i}.json", "w") as outfile :
                 json.dump(registro_dict, outfile, indent=4)
 
         print()
