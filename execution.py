@@ -3,9 +3,14 @@ import datetime
 import os
 import cpuinfo
 
-from src.functions.helper_functions import avaliar_mochila, diferenca_mochilas, geometric_reduction, gerar_itens_aleatorios, gerar_mochila_aleatoria, gerar_mochila_vizinha
-from src.simulated_annealing.simulated_annealing import SimulatedAnnealing
-
+from src import (
+    SimulatedAnnealing,
+    avaliar_mochila,
+    diferenca_mochilas,
+    geometric_reduction,
+    gerar_itens_aleatorios,
+    gerar_mochila_aleatoria,
+    gerar_mochila_vizinha)
 
 to_save = False
 to_save_population = to_save

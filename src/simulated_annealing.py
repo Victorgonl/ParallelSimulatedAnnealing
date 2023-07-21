@@ -5,8 +5,8 @@ import time
 import multiprocessing
 from typing import Any, Callable, Dict, List, Tuple
 
-from ..knapsack_problem.knapsack import Mochila
-from ..knapsack_problem.item import Item
+from .mochila import Mochila
+from .item import Item
 
 
 class SimulatedAnnealing:

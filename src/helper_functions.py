@@ -2,8 +2,8 @@ import copy
 import random
 from typing import List
 
-from ..knapsack_problem.item import Item
-from ..knapsack_problem.knapsack import Mochila
+from .item import Item
+from .mochila import Mochila
 
 
 def linear_reduction(temperature, alpha):
