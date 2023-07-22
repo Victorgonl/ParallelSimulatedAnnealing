@@ -1,67 +1,36 @@
-import json
 import datetime
+import json
 import os
 from typing import Any, Dict, List
-import cpuinfo
 
 from src import (
     SimulatedAnnealing,
     Item,
     Mochila,
+    
     avaliar_mochila,
     diferenca_mochilas,
-    geometric_reduction,
+    reducao_geometrica,
+    
     gerar_itens_aleatorios,
     gerar_mochila_aleatoria,
-    gerar_mochila_vizinha
+    gerar_mochila_vizinha,
+    
+    registrar_algoritmos,
+    registrar_cpu_info,
+    registrar_experimentacao,
+    registrar_populacao,
+    registrar_solucao_inicial
 )
 
 
-TO_SAVE = False
-TO_SAVE_POPULATION = TO_SAVE
-SHOW_PROGRESS_BAR = not TO_SAVE
+# Variáveis globais
+REGISTRAR = False
+REGISTRAR_POPULACAO = REGISTRAR
+MOSTRAR_BARRA_PROGRESSO = not REGISTRAR
 
-DATE = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M")
-DIRECTORY = f"./data/{DATE}/"
-
-
-def registrar_populacao(parametros_populacao: Dict[str, Any], itens: List[Item]) -> None:
-    itens_dict = {"id": [item.id for item in itens],
-                "valor": [item.valor for item in itens],
-                "peso": [item.peso for item in itens]}
-
-    with open(f"{DIRECTORY}pop_param.json", "w") as outfile:
-        json.dump(parametros_populacao, outfile, indent=4)
-
-    if TO_SAVE_POPULATION:
-        with open(f"{DIRECTORY}pop.json", "w") as outfile:
-            json.dump(itens_dict, outfile, indent=4)
-
-
-def registrar_solucao_inicial(mochila_inicial: Mochila) -> None:
-    mochila_inicial_dict = {"capacidade": mochila_inicial.capacidade,
-                            "itens": [item.id for item in mochila_inicial.itens]}
-    
-    with open(f"{DIRECTORY}init_solution.json", "w") as outfile:
-        json.dump(mochila_inicial_dict, outfile, indent=4)
-
-
-def registrar_cpu_info() -> None:
-    # parâmetros da(s) máquina(s)
-    cpu_info = cpuinfo.get_cpu_info()
-    
-    with open(f"{DIRECTORY}cpu_info.json", "w") as outfile:
-        json.dump(cpu_info, outfile, indent=4)
-
-
-def registrar_experimentacao(parametros_experimentacao: Dict[str, Any]) -> None:
-    with open(f"{DIRECTORY}exp_params.json", "w") as outfile:
-        json.dump(parametros_experimentacao, outfile, indent=4)
-
-
-def registrar_algoritmos(parametros_algoritmos: Dict[str, Any]) -> None:
-    with open(f"{DIRECTORY}algoritm_params.json", "w") as outfile:
-        json.dump(parametros_algoritmos, outfile, indent=4)
+DATA = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M")
+DIRETORIO = f"./data/{DATA}/"
 
 
 def executar_algoritmo_paralelo(parametros_experimentacao: Dict[str, Any],
@@ -86,13 +55,13 @@ def executar_algoritmo_paralelo(parametros_experimentacao: Dict[str, Any],
                 gerar_solucao_vizinha=gerar_mochila_vizinha,
                 comparar_solucoes=diferenca_mochilas,
                 avaliar_solucao=avaliar_mochila,
-                funcao_resfriamento=geometric_reduction,
+                funcao_resfriamento=reducao_geometrica,
                 solucao_inicial=mochila_inicial,
                 itens=itens,
             )
 
             solução, registro = simulated_annealing.executar_paralelo(
-                mostrar_barra_progresso=SHOW_PROGRESS_BAR,
+                mostrar_barra_progresso=MOSTRAR_BARRA_PROGRESSO,
                 forma_selecao=parametros_algoritmos["forma_selecao"],
                 numero_processos=numero_processos,
             )
@@ -112,18 +81,18 @@ def executar_algoritmo_paralelo(parametros_experimentacao: Dict[str, Any],
                             "itens": [item.id for item in solução.itens],
                             "solution": [[item.id for item in solução.itens] for solução in registro["solução"]]}
 
-            if TO_SAVE:
-                with open(f"{DIRECTORY}run-PSA{numero_processos}-{i}.json", "w") as outfile :
+            if REGISTRAR:
+                with open(f"{DIRETORIO}run-PSA{numero_processos}-{i}.json", "w") as outfile :
                     json.dump(registro_dict, outfile, indent=4)
 
             print()
 
 
 if __name__ == "__main__":
-    os.makedirs(DIRECTORY, exist_ok=True) if TO_SAVE else None
+    os.makedirs(DIRETORIO, exist_ok=True) if REGISTRAR else None
 
     print()
-    print("Experimentação:", DATE)
+    print("Experimentação:", DATA)
     print()
 
     parametros_algoritmos = {"temperatura_inicial": 1,
@@ -153,11 +122,11 @@ if __name__ == "__main__":
     
     mochila_inicial = gerar_mochila_aleatoria(capacidade=capacidade_mochilas, itens=itens)
     
-    if TO_SAVE:
-        registrar_populacao(parametros_populacao, itens)
-        registrar_solucao_inicial(mochila_inicial)
-        registrar_cpu_info()
-        registrar_experimentacao(parametros_experimentacao)
-        registrar_algoritmos(parametros_algoritmos)
+    if REGISTRAR:
+        registrar_populacao(parametros_populacao, itens, DIRETORIO, REGISTRAR_POPULACAO)
+        registrar_solucao_inicial(mochila_inicial, DIRETORIO)
+        registrar_cpu_info(DIRETORIO)
+        registrar_experimentacao(parametros_experimentacao, DIRETORIO)
+        registrar_algoritmos(parametros_algoritmos, DIRETORIO)
 
     executar_algoritmo_paralelo(parametros_experimentacao, parametros_algoritmos, mochila_inicial, itens)

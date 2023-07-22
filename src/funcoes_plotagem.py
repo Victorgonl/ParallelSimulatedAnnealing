@@ -1,7 +1,6 @@
-from typing import Any
 import matplotlib.pyplot
 
-from .helper_functions import avaliar_mochila
+from .funcoes_auxiliares import avaliar_mochila
 
 
 def plotar_grafico_de_dispersao(scatters,
