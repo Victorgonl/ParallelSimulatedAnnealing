@@ -2,8 +2,6 @@
 
 <img src="./figs/UFLA.png" width=400>
 
-<br>
-
 # Parallel Simulated Annealing
 
 </center>
@@ -18,10 +16,9 @@ Trabalho Final da disciplina **Programação Paralela e Concorrente** (2023/1).
 - Henrique Curi de Miranda - 202020087
 - Victor Gonçalves Lima - 202020775
 
----
-
-
 O trabalho tem como objeto paralelizar o algorimo de otimização ***Simulated Annealing*** e analizar os resutados obtidos.
+
+---
 
 <center>
 <figure id="fig1">
@@ -30,7 +27,7 @@ O trabalho tem como objeto paralelizar o algorimo de otimização ***Simulated A
 </figure>
 </center>
 
-<br>
+---
 
 Para mais informações sobre o algoritmo: https://en.wikipedia.org/wiki/Simulated_annealing
 
