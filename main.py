@@ -89,6 +89,14 @@ def executar_algoritmo_paralelo(parametros_experimentacao: Dict[str, Any],
 
 
 if __name__ == "__main__":
+    """
+    TODO:
+    - Criar Notebook para mostrar métricas;
+    - numero_vizinhos_explorar: 100, 1000, 10000;
+    - Executar em laptop Victor e no PC Zanella;
+    - Mudar nome dos logs de data.
+    """
+    
     os.makedirs(DIRETORIO, exist_ok=True) if REGISTRAR else None
 
     print()
@@ -104,14 +112,17 @@ if __name__ == "__main__":
     parametros_experimentacao = {"numero_execucoes": 1,
                                     "processes_number": [1, 2, 4, 8, 16]}
     
-    capacidade_mochilas = 1.0
+    # 10 toneladas
+    capacidade_mochilas = 10000
     
-    parametros_populacao = {"numero_itens": 100000,
-                            "valor_minimo" :0.0,
-                            "valor_maximo": 1.0,
-                            "peso_minimo": 0.0,
-                            "peso_maximo": 1.0,
-                            "tipo": "float"}
+    # TODO: Adicionar parâmetro de tipo do valor
+    # valor = int e peso = float
+    parametros_populacao = {"numero_itens": 10000,  # número de itens que serão gerados
+                            "valor_minimo": 1,      # prioridade mínima
+                            "valor_maximo": 5,      # prioridade máxima
+                            "peso_minimo": 10.0,    # 10 kgs
+                            "peso_maximo": 1000.0,  # 1 tonelada
+                            "tipo": "float"}        # tipo dos dois
 
     itens = gerar_itens_aleatorios(parametros_populacao["numero_itens"],
                                 parametros_populacao["valor_minimo"],
@@ -130,3 +141,4 @@ if __name__ == "__main__":
         registrar_algoritmos(parametros_algoritmos, DIRETORIO)
 
     executar_algoritmo_paralelo(parametros_experimentacao, parametros_algoritmos, mochila_inicial, itens)
+    
