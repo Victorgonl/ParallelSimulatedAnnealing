@@ -1,13 +1,14 @@
 <center>
 
-<img src="./figs/UFLA.png" width=250>
+<img src="./figs/UFLA.png" width=400>
+
+<br>
 
 # Parallel Simulated Annealing
 
 </center>
 
 Trabalho Final da disciplina **Programação Paralela e Concorrente** (2023/1).
-
 
 **Professora:** Marluce Rodrigues Pereira
 
@@ -17,6 +18,9 @@ Trabalho Final da disciplina **Programação Paralela e Concorrente** (2023/1).
 - Henrique Curi de Miranda - 202020087
 - Victor Gonçalves Lima - 202020775
 
+---
+
+
 O trabalho tem como objeto paralelizar o algorimo de otimização ***Simulated Annealing*** e analizar os resutados obtidos.
 
 <center>
@@ -25,6 +29,8 @@ O trabalho tem como objeto paralelizar o algorimo de otimização ***Simulated A
   <figcaption>Figura 1: Simulated annealing procurando pelo máximo global. Quanto menor a temperatura, menor a chance de escolher uma solução pior.</figcaption>
 </figure>
 </center>
+
+<br>
 
 Para mais informações sobre o algoritmo: https://en.wikipedia.org/wiki/Simulated_annealing
 
