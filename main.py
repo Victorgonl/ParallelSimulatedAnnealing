@@ -7,15 +7,15 @@ from src import (
     SimulatedAnnealing,
     Item,
     Mochila,
-    
+
     avaliar_mochila,
     diferenca_mochilas,
     reducao_geometrica,
-    
+
     gerar_itens_aleatorios,
     gerar_mochila_aleatoria,
     gerar_mochila_vizinha,
-    
+
     registrar_algoritmos,
     registrar_cpu_info,
     registrar_experimentacao,
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     - Executar em laptop Victor e no PC Zanella;
     - Mudar nome dos logs de data.
     """
-    
+
     os.makedirs(DIRETORIO, exist_ok=True) if REGISTRAR else None
 
     print()
@@ -108,31 +108,31 @@ if __name__ == "__main__":
                             "taxa_resfriamento": 0.01,
                             "numero_vizinhos_explorar": 1000,
                             "forma_selecao": "optimal"}
-    
+
     parametros_experimentacao = {"numero_execucoes": 1,
                                     "processes_number": [1, 2, 4, 8, 16]}
-    
+
     # 10 toneladas
     capacidade_mochilas = 10000
-    
-    # TODO: Adicionar parâmetro de tipo do valor
-    # valor = int e peso = float
+
     parametros_populacao = {"numero_itens": 10000,  # número de itens que serão gerados
                             "valor_minimo": 1,      # prioridade mínima
                             "valor_maximo": 5,      # prioridade máxima
+                            "tipo_valor": "int",    # tipo dos valores
                             "peso_minimo": 10.0,    # 10 kgs
                             "peso_maximo": 1000.0,  # 1 tonelada
-                            "tipo": "float"}        # tipo dos dois
+                            "tipo_peso": "float"}   # tipo dos pesos
 
     itens = gerar_itens_aleatorios(parametros_populacao["numero_itens"],
                                 parametros_populacao["valor_minimo"],
                                 parametros_populacao["valor_maximo"],
+                                parametros_populacao["tipo_valor"],
                                 parametros_populacao["peso_minimo"],
                                 parametros_populacao["peso_maximo"],
-                                parametros_populacao["tipo"])
-    
+                                parametros_populacao["tipo_peso"])
+
     mochila_inicial = gerar_mochila_aleatoria(capacidade=capacidade_mochilas, itens=itens)
-    
+
     if REGISTRAR:
         registrar_populacao(parametros_populacao, itens, DIRETORIO, REGISTRAR_POPULACAO)
         registrar_solucao_inicial(mochila_inicial, DIRETORIO)
@@ -141,4 +141,3 @@ if __name__ == "__main__":
         registrar_algoritmos(parametros_algoritmos, DIRETORIO)
 
     executar_algoritmo_paralelo(parametros_experimentacao, parametros_algoritmos, mochila_inicial, itens)
-    

@@ -17,16 +17,19 @@ def reducao_geometrica(temperature, alpha):
 def gerar_itens_aleatorios(numero_itens: int,
                            valor_minimo: float,
                            valor_maximo: float,
+                           tipo_valor: str,
                            peso_minimo: float,
                            peso_maximo: float,
-                           tipo=int) -> List[Item]:
+                           tipo_peso: str) -> List[Item]:
     itens = []
     for i in range(numero_itens):
-        if tipo == "int":
+        if tipo_valor == "int":
             valor = random.randint(valor_minimo, valor_maximo)
-            peso = random.randint(peso_minimo, peso_maximo)
-        elif tipo == "float":
+        elif tipo_valor == "float":
             valor = random.uniform(valor_minimo, valor_maximo)
+        if tipo_peso == "int":
+            peso = random.randint(peso_minimo, peso_maximo)
+        elif tipo_peso == "float":
             peso = random.uniform(peso_minimo, peso_maximo)
         item = Item(i, valor, peso)
         itens.append(item)
