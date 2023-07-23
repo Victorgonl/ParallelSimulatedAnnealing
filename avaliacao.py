@@ -12,9 +12,9 @@ evaluation["ssa"] = {"run_times": [],
                       "final_value": []}
 
 f = open(f"{directory}exp_params.json")
-parâmetros_da_experimentação = json.load(f)
+parametros_experimentacao = json.load(f)
 
-""" for i in range(parâmetros_da_experimentação["número_de_execuções"]):
+""" for i in range(parametros_experimentacao["número_de_execuções"]):
 
     f = open(f"{directory}run-SSA-{i}.json")
     j = json.load(f)
@@ -27,14 +27,14 @@ print("mean_run_time:", numpy.mean(evaluation["ssa"]["run_times"]))
 print("mean_value:", numpy.mean(evaluation["ssa"]["final_value"]))
 print() """
 
-threads_number = parâmetros_da_experimentação["threads_number"]
+threads_number = parametros_experimentacao["threads_number"]
 k = 0
 for k in range(len(threads_number)):
 
     evaluation[f"psa{threads_number[k]}"] = {"run_times": [],
                                               "final_value": []}
 
-    for i in range(parâmetros_da_experimentação["número_de_execuções"]):
+    for i in range(parametros_experimentacao["número_de_execuções"]):
 
         f = open(f"{directory}/run-PSA{threads_number[k]}-{i}.json")
         j = json.load(f)

@@ -1,11 +1,13 @@
 import matplotlib.pyplot
 
-from src.knapsack_problem.knapsack import avaliar_mochila
+from .funcoes_auxiliares import avaliar_mochila
 
 
-def plotar_gráfico_de_dispersão(scatters,
+def plotar_grafico_de_dispersao(scatters,
                                 title,
-                                x_label, y_label):
+                                x_label,
+                                y_label) -> None:
+    
     if not type(scatters) is list:
         scatters = [scatters]
     fig, ax = matplotlib.pyplot.subplots()
@@ -20,10 +22,18 @@ def plotar_gráfico_de_dispersão(scatters,
                    label=scatter["label"])
     ax.legend(loc="center right")
     matplotlib.pyplot.show()
+    
 
-def plotar_gráfico(x, y, color,
-                   xlabel, ylabel, title="",
-                   grid=True, xscale="linear", invert_xaxis=False):
+def plotar_grafico(x,
+                   y,
+                   color,
+                   xlabel,
+                   ylabel,
+                   title="",
+                   grid=True,
+                   xscale="linear",
+                   invert_xaxis=False) -> None:
+    
     fig, ax = matplotlib.pyplot.subplots()
     ax.plot(x, y, color=color)
     ax.set_title(title)
@@ -35,7 +45,7 @@ def plotar_gráfico(x, y, color,
     matplotlib.pyplot.show()
 
 
-def plotar_itens(itens, mochila=None):
+def plotar_itens(itens, mochila=None) -> None:
     itens_dict = {
         "item": [item.id for item in itens],
         "valor": [item.valor for item in itens],
@@ -47,7 +57,7 @@ def plotar_itens(itens, mochila=None):
                     "label": "Itens",
                     "color": "darkblue"}
     if mochila is None:
-        plotar_gráfico_de_dispersão(scatter_itens,
+        plotar_grafico_de_dispersao(scatter_itens,
                                     title="Gráfico de Dispersão dos Itens",
                                     x_label="peso", y_label="valor")
     else:
@@ -59,6 +69,6 @@ def plotar_itens(itens, mochila=None):
         print("Total de itens na mochila:", len(mochila.itens))
         print("Valor total na mochila:", avaliar_mochila(mochila))
         print("Peso total na mochila:", mochila.peso())
-        plotar_gráfico_de_dispersão([scatter_itens, scatter_mochila],
+        plotar_grafico_de_dispersao([scatter_itens, scatter_mochila],
                                     "Itens selecionados na mochila",
                                     x_label="Peso", y_label="Valor")
