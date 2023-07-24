@@ -62,11 +62,30 @@ def registrar_cpu_info(diretorio: str) -> None:
         json.dump(cpu_info, outfile, indent=4)
 
 
+def carregar_cpu_info(diretorio: str) -> dict:
+    with open(f"{diretorio}cpu_info.json", "r") as infile:
+        cpu_info = json.load(infile)
+    return cpu_info
+
+
+
 def registrar_experimentacao(parametros_experimentacao: Dict[str, Any], diretorio: str) -> None:
     with open(f"{diretorio}exp_params.json", "w") as outfile:
         json.dump(parametros_experimentacao, outfile, indent=4)
 
 
+def carregar_experimentacao(diretorio: str) -> Dict[str, Any]:
+    with open(f"{diretorio}exp_params.json", "r") as infile:
+        parametros_experimentacao = json.load(infile)
+    return parametros_experimentacao
+
+
 def registrar_algoritmos(parametros_algoritmos: Dict[str, Any], diretorio: str) -> None:
     with open(f"{diretorio}algoritm_params.json", "w") as outfile:
         json.dump(parametros_algoritmos, outfile, indent=4)
+
+
+def carregar_algoritmos(diretorio: str) -> Dict[str, Any]:
+    with open(f"{diretorio}algoritm_params.json", "r") as infile:
+        parametros_algoritmos = json.load(infile)
+    return parametros_algoritmos
