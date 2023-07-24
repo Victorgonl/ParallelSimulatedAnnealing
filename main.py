@@ -29,7 +29,7 @@ from src import (
 # Variáveis globais
 REGISTRAR = True
 REGISTRAR_POPULACAO = True
-MOSTRAR_BARRA_PROGRESSO = not REGISTRAR
+MOSTRAR_BARRA_PROGRESSO = REGISTRAR
 
 DATA = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M")
 DIRETORIO = f"./data/{DATA}/"
@@ -108,7 +108,7 @@ if __name__ == "__main__":
     parametros_algoritmos = {"temperatura_inicial": 1,
                             "temperatura_final": 0.1,
                             "taxa_resfriamento": 0.01,
-                            "numero_vizinhos_explorar": 1000,
+                            "numero_vizinhos_explorar": 10000,
                             "forma_selecao": "optimal"}
 
     parametros_experimentacao = {"numero_execucoes": 10,

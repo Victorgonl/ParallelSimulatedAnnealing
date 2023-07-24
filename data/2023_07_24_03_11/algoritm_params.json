@@ -1,0 +1,7 @@
+{
+    "temperatura_inicial": 1,
+    "temperatura_final": 0.1,
+    "taxa_resfriamento": 0.01,
+    "numero_vizinhos_explorar": 10000,
+    "forma_selecao": "optimal"
+}
