@@ -16,7 +16,7 @@ Trabalho Final da disciplina **Programação Paralela e Concorrente** (2023/1).
 - Henrique Curi de Miranda - 202020087
 - Victor Gonçalves Lima - 202020775
 
-O trabalho tem como objeto paralelizar o algorimo de otimização ***Simulated Annealing*** e analizar os resutados obtidos.
+O trabalho tem como objetivo paralelizar o algorimo de otimização ***Simulated Annealing*** e analizar os resutados obtidos.
 
 ---
 
