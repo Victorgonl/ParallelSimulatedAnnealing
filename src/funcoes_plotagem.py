@@ -7,7 +7,7 @@ def plotar_grafico_de_dispersao(scatters,
                                 title,
                                 x_label,
                                 y_label) -> None:
-    
+
     if not type(scatters) is list:
         scatters = [scatters]
     fig, ax = matplotlib.pyplot.subplots()
@@ -22,7 +22,7 @@ def plotar_grafico_de_dispersao(scatters,
                    label=scatter["label"])
     ax.legend(loc="center right")
     matplotlib.pyplot.show()
-    
+
 
 def plotar_grafico(x,
                    y,
@@ -33,7 +33,7 @@ def plotar_grafico(x,
                    grid=True,
                    xscale="linear",
                    invert_xaxis=False) -> None:
-    
+
     fig, ax = matplotlib.pyplot.subplots()
     ax.plot(x, y, color=color)
     ax.set_title(title)
@@ -63,7 +63,7 @@ def plotar_itens(itens, mochila=None) -> None:
     else:
         scatter_mochila = {"x": [item.peso for item in mochila.itens],
                            "y": [item.valor for item in mochila.itens],
-                           "s": 3,
+                           "s": 10,
                            "label": "Itens selecionados",
                            "color": "orangered"}
         print("Total de itens na mochila:", len(mochila.itens))
